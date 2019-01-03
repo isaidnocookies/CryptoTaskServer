@@ -4,8 +4,10 @@ import { CachedData } from "../api/cacheddata.api"
 import { BitcoinAverageService } from './bitcoinaverage.service';
 import { CoinGeckoService } from "./coingecko.service";
 import { CatexService } from "./catex.service";
-import { MatrixService } from "./matrix.service";
 import { CoinMarketCapService } from "./coinmarketcap.service";
+import { PoloniexService } from "./poloniex.service";
+
+import { MatrixService } from "./matrix.service";
 
 class DownloaderService {
     cachedData : CachedData;
@@ -14,6 +16,7 @@ class DownloaderService {
     catexService: CatexService;
     coingeckoService: CoinGeckoService;
     coinmarketcapService: CoinMarketCapService;
+    poloniexService: PoloniexService;
     matrixService: MatrixService;
 
     config: any = new Config();
@@ -27,6 +30,7 @@ class DownloaderService {
         this.catexService = new CatexService(this.cachedData);
         this.coingeckoService = new CoinGeckoService(this.cachedData);
         this.coinmarketcapService = new CoinMarketCapService(this.cachedData);
+        this.poloniexService = new PoloniexService(this.cachedData);
 
         this.matrixService = new MatrixService(this.cachedData);
     }
@@ -40,6 +44,9 @@ class DownloaderService {
         this.bitcoinaverageService.download();
         this.catexService.download();
         this.coingeckoService.download();
+        this.poloniexService.download();
+
+        // add coinmarketcap when api key is paid for to fit our needs
         // this.coinmarketcapService.download();
     }
 }

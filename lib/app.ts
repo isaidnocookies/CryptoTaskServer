@@ -72,8 +72,10 @@ class App {
 
     // Setup MongoDB connection
     private mongoSetup(): void {
-        mongoose.Promise = global.Promise;
-        mongoose.connect(this.mongoUrl, { useNewUrlParser: true });    
+        if (this.configuration.saveMatrixToDatabase) {
+            mongoose.Promise = global.Promise;
+            mongoose.connect(this.mongoUrl, { useNewUrlParser: true });    
+        }
     }
 
     private startDownloading() : void {

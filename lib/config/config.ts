@@ -129,4 +129,23 @@ export class Config
         milliRelayPerRequest: 1000
     }
 
+    poloniex: any = {
+        sourceShortname: "Poloniex",
+        sourceName: "POL",
+        supportedAssets: [
+            this.assets.DASH,
+            this.assets.DGB,
+            this.assets.DOGE,
+            this.assets.LTC,
+            this.assets.XMR,
+            this.assets.XRP,
+            this.assets.ETH,
+            this.assets.ZEC,
+            this.assets.BCH,
+            this.assets.ZRX
+        ],
+        supportedCurrencies: [
+        ],
+        milliRelayPerRequest: 1000
+    }
 }
