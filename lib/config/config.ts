@@ -101,13 +101,20 @@ export class Config
         sourceName: "CoinMarketCap",
         supportedAssets: [
             this.assets.BTC,
-            this.assets.DOGE
+            this.assets.DOGE,
+            this.assets.RMT,
+            this.assets.ZEN,
+            this.assets.LTC,
+            this.assets.XLM,
+            this.assets.XMR,
+            this.assets.ETH
         ],
         // supportedCurrencies: [
         //     this.currencies.USD,
         //     this.currencies.MXN
         // ],
-        milliRelayPerRequest: 2000
+        milliRelayPerRequest: 2000,
+        apiKey: "e672675d-3393-4160-832f-6135253a5451"
     };
 
     catex: any = {

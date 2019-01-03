@@ -5,6 +5,7 @@ import { BitcoinAverageService } from './bitcoinaverage.service';
 import { CoinGeckoService } from "./coingecko.service";
 import { CatexService } from "./catex.service";
 import { MatrixService } from "./matrix.service";
+import { CoinMarketCapService } from "./coinmarketcap.service";
 
 class DownloaderService {
     cachedData : CachedData;
@@ -12,6 +13,7 @@ class DownloaderService {
     bitcoinaverageService: BitcoinAverageService;
     catexService: CatexService;
     coingeckoService: CoinGeckoService;
+    coinmarketcapService: CoinMarketCapService;
     matrixService: MatrixService;
 
     config: any = new Config();
@@ -20,9 +22,12 @@ class DownloaderService {
 
     constructor(cachedData) {
         this.cachedData = cachedData;
+
         this.bitcoinaverageService = new BitcoinAverageService(this.cachedData);
         this.catexService = new CatexService(this.cachedData);
         this.coingeckoService = new CoinGeckoService(this.cachedData);
+        this.coinmarketcapService = new CoinMarketCapService(this.cachedData);
+
         this.matrixService = new MatrixService(this.cachedData);
     }
 
@@ -32,9 +37,10 @@ class DownloaderService {
     }
 
     downloadMarketValues() {
-        this.bitcoinaverageService.download();
-        this.catexService.download();
-        this.coingeckoService.download();
+        // this.bitcoinaverageService.download();
+        // this.catexService.download();
+        // this.coingeckoService.download();
+        this.coinmarketcapService.download();
     }
 }
 

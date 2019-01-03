@@ -26,7 +26,7 @@ class BitcoinAverageService extends GenericDownloaderService {
                 valuePromises.push(this.bitcoinaverageApi.getValue("BTC", curr));
             }
             Promise.all(valuePromises).then((values) => {
-                this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname,values);
+                this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, values);
             }).then(() => {
                 setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
             })
