@@ -37,10 +37,10 @@ class DownloaderService {
     }
 
     downloadMarketValues() {
-        // this.bitcoinaverageService.download();
-        // this.catexService.download();
-        // this.coingeckoService.download();
-        this.coinmarketcapService.download();
+        this.bitcoinaverageService.download();
+        this.catexService.download();
+        this.coingeckoService.download();
+        // this.coinmarketcapService.download();
     }
 }
 
