@@ -17,7 +17,7 @@ class CatexService extends GenericDownloaderService {
         this.helpers = new HelperFunctions();
     }
 
-    async download() {
+    download() {
         this.downloadValues();
         setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
     }

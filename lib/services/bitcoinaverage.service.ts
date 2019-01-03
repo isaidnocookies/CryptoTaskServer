@@ -39,6 +39,8 @@ class BitcoinAverageService extends GenericDownloaderService {
         this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, marketValues);
     }
 
+
+    
     // download_old() {
     //     Promise.resolve(this.config.bitcoinaverage.supportedAssets.map((ticker) => {
     //         return this.bitcoinaverageApi.getValue(ticker, "BTC");

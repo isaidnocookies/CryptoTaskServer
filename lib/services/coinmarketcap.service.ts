@@ -18,13 +18,16 @@ class CoinMarketCapService extends GenericDownloaderService {
         this.helpers = new HelperFunctions();
     }
 
-    async download() {
-        setInterval( async function downloadAll() {
-            var marketValues = await this.coinmarketcapApi.getAllAssets(this.config.coinmarketcap.supportedAssets);
-            this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, marketValues);
-            console.log(marketValues);
-        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.coinmarketcap.milliDelayPerRequest);
+    download() {
+        this.downloadValues();
+        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
     }
+
+    async downloadValues() {
+        var values : any = await this.coinmarketcapApi.getAllAssets(this.config.coinmarketcap.supportedAssets);
+        this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, values);
+    }
+
 }
 
 export { CoinMarketCapService }
@@ -32,6 +35,13 @@ export { CoinMarketCapService }
 
 
 
+// async download_old() {
+//     setInterval( async function downloadAll() {
+//         var marketValues = await this.coinmarketcapApi.getAllAssets(this.config.coinmarketcap.supportedAssets);
+//         this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, marketValues);
+//         console.log(marketValues);
+//     }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.coinmarketcap.milliDelayPerRequest);
+// }
 
 
 // Promise.resolve(this.config.coinmarketcap.supportedAssets.map((ticker) => {
