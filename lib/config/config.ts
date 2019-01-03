@@ -14,8 +14,7 @@ export class Config
     };
 
     saveMatrixToDatabase : boolean = false;
-
-    downloaderDelayInMilliseconds: number = 3000;
+    downloaderDelayInMilliseconds: number = 10000;
 
     assets : any = {
         BCH: "BCH",
@@ -66,7 +65,10 @@ export class Config
             this.currencies.USD,
             this.currencies.MXN
         ],
-        milliRelayPerRequest : 0,
+        tokens : [
+            this.currencies.ZRX
+        ],
+        milliDelayPerRequest : 0,
         apiPublicKey: "YzRmMDY0YzZjOWM1NGM3YjhhM2RjNmVkMmU1OTc5ZjE",
         apiSecretKey: "OGQwYTExOTI2YzY1NDY5NmEwMjUyNTI4YzgxNjUyNDQ5ZWRlOWE2NGFjM2Y0OTY3YTgzYTkxZmI0YWRjMzRjZA"
     };
@@ -86,14 +88,14 @@ export class Config
             this.currencies.USD,
             this.currencies.MXN
         ],
-        milliRelayPerRequest: 250,
         assetIds: {
             BTC: "bitcoin",
             NIKO: "niko",
             RMT: "sureremit",
             SHEL: "shelterdao",
             ZEN: "zencash"
-        }
+        },
+        milliDelayPerRequest: 250
     };
 
     coinmarketcap: any = {
@@ -113,7 +115,7 @@ export class Config
         //     this.currencies.USD,
         //     this.currencies.MXN
         // ],
-        milliRelayPerRequest: 2000,
+        milliDelayPerRequest: 2000,
         apiKey: "e672675d-3393-4160-832f-6135253a5451"
     };
 
@@ -126,7 +128,7 @@ export class Config
         ],
         supportedCurrencies: [
         ],
-        milliRelayPerRequest: 1000
+        milliDelayPerRequest: 1000
     }
 
     poloniex: any = {
@@ -146,6 +148,6 @@ export class Config
         ],
         supportedCurrencies: [
         ],
-        milliRelayPerRequest: 1000
+        milliDelayPerRequest: 5000
     }
 }

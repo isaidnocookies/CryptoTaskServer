@@ -42,9 +42,9 @@ class DownloaderService {
 
     downloadMarketValues() {
         this.bitcoinaverageService.download();
-        this.catexService.download();
-        this.coingeckoService.download();
         this.poloniexService.download();
+        this.catexService.download();
+        this.coingeckoService.download(); // needs work
 
         // add coinmarketcap when api key is paid for to fit our needs
         // this.coinmarketcapService.download();

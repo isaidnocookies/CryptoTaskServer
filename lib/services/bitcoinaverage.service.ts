@@ -17,68 +17,56 @@ class BitcoinAverageService extends GenericDownloaderService {
         this.helpers = new HelperFunctions();
     }
 
-    download() {
-        Promise.resolve(this.config.bitcoinaverage.supportedAssets.map((ticker) => {
-            return this.bitcoinaverageApi.getValue(ticker, "BTC");
-        })).then((valuePromises) => {
-            for (var i = 0; i < this.config.bitcoinaverage.supportedCurrencies.length; i++) {
-                var curr: string = this.config.bitcoinaverage.supportedCurrencies[i];
-                valuePromises.push(this.bitcoinaverageApi.getValue("BTC", curr));
-            }
-            Promise.all(valuePromises).then((values) => {
-                this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, values);
-            }).then(() => {
-                setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
-            })
-        })
+    async download() {
+        this.downloadValues();
+        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
     }
+
+    async downloadValues() {
+        var marketValues: any = [];
+
+        for (var i = 0; i < this.config.bitcoinaverage.supportedAssets.length; i++) {
+            var ticker: string = this.config.bitcoinaverage.supportedAssets[i];
+            var value: any = await this.bitcoinaverageApi.getValue(ticker, "BTC");
+            marketValues.push(value);
+        }
+
+        for (var i = 0; i < this.config.bitcoinaverage.supportedCurrencies.length; i++) {
+            var curr: string = this.config.bitcoinaverage.supportedCurrencies[i];
+            var value: any = await this.bitcoinaverageApi.getValue("BTC", curr);
+            marketValues.push(value);
+        }
+        this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, marketValues);
+    }
+
+    // download_old() {
+    //     Promise.resolve(this.config.bitcoinaverage.supportedAssets.map((ticker) => {
+    //         return this.bitcoinaverageApi.getValue(ticker, "BTC");
+    //     })).then((valuePromises) => {
+    //         for (var i = 0; i < this.config.bitcoinaverage.supportedCurrencies.length; i++) {
+    //             var curr: string = this.config.bitcoinaverage.supportedCurrencies[i];
+    //             valuePromises.push(this.bitcoinaverageApi.getValue("BTC", curr));
+    //         }
+    //         Promise.all(valuePromises).then((values) => {
+    //             this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, values);
+    //         }).then(() => {
+    //             setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
+    //         })
+    //     })
+    // }
+
+    // download() {
+    //     setInterval(async function downloadAll() {
+    //         var marketValues : any = [];
+    //         marketValues.push(await this.bitcoinaverageApi.getAllAssets(this.config.bitcoinaverage.supportedAssets));
+    //         if (marketValues !== []) {
+    //             this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, marketValues);
+    //             console.log(marketValues);
+    //         } else {
+    //             console.log("ERror...");
+    //         }
+    //     }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.bitcoinaverage.milliDelayPerRequest);
+    // }
 }
 
 export { BitcoinAverageService }
-
-
-
-
-
-
-
-
-
-
-
-// download() {
-    //     var valuepromises : any = this.config.bitcoinaverage.supportedAssets.map((ticker) => {
-    //         return this.bitcoinaverageApi.getValue(ticker, "BTC");
-    //     });
-
-    //     for (var i = 0; i < this.config.bitcoinaverage.supportedCurrencies.length; i++) {
-    //         var curr: string = this.config.bitcoinaverage.supportedCurrencies[i];
-    //         valuepromises.push(this.bitcoinaverageApi.getValue("BTC", curr));
-    //     }
-
-    //     return Promise.all(valuepromises);
-    // }
-
-// download using map with no delay rather than the sleeping version...
-// download() {
-//     var valuepromises : any = this.config.bitcoinaverage.supportedAssets.map((ticker) => {
-//         return this.bitcoinaverageApi.getValue(ticker, "BTC");
-//     });
-//     return Promise.all(valuepromises);
-// }
-
-// download using delay in order to avoid rate limiting in external apis
-// async download() {
-//     var valuePromises: any = [];
-//     var rateLimitInMilli: number = (this.config.bitcoinaverage.milliRelayPerRequest / 60) * 1000;
-
-//     for (var i = 0; i < this.config.bitcoinaverage.supportedAssets.length; i++) {
-//         var ticker: string = this.config.bitcoinaverage.supportedAssets[i];
-//         valuePromises.push(await this.bitcoinaverageApi.getValue(ticker, "BTC"));
-//         if (rateLimitInMilli > 0) {
-//             this.helpers.sleep(rateLimitInMilli);
-//         }
-//     }
-
-//     return valuePromises;
-// }

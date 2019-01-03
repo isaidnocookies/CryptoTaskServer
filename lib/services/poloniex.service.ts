@@ -22,7 +22,7 @@ class PoloniexService extends GenericDownloaderService {
         setInterval(async function downloadAll() {
             var marketValues = await this.poloniexApi.getAllAssets(this.config.poloniex.supportedAssets);
             this.cachedData.setTempData(this.config.poloniex.sourceShortname, marketValues);
-        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.poloniex.milliRelayPerRequest);
+        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.poloniex.milliDelayPerRequest);
     }
 }
 

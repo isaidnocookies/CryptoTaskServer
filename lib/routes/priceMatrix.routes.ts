@@ -26,7 +26,6 @@ export class PriceMatrixRoutes {
 
     private getPriceMatrix() : any {
         // add db support...
-
         var value: any = this.cachedData.getKeyValue("PriceMatrix");
         return value;
     }

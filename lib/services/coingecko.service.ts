@@ -19,22 +19,27 @@ class CoinGeckoService extends GenericDownloaderService {
     }
 
     async download() {
-        Promise.resolve(this.config.coingecko.supportedAssets.map((ticker) => {
-            return this.coingeckoApi.getValue(ticker, "BTC");
-        })).then(async (valuePromises) => {
-            for (var i = 0; i < this.config.coingecko.supportedCurrencies.length; i++) {
-                var curr: string = this.config.coingecko.supportedCurrencies[i];
-                valuePromises.push(this.coingeckoApi.getValue("BTC", curr));
-            }
-            var values : any = [];
-            for (var i = 0; i < valuePromises.length; i++) {
-                values.push(await Promise.resolve(valuePromises[i]))
-                this.helpers.sleep(this.config.coingecko.milliRelayPerRequest)
-            }
-            this.cachedData.setTempData(this.config.coingecko.sourceShortname, values);
-            setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
-        })
+        this.downloadValues();
+        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
     }
+
+    async downloadValues() {
+        var marketValues: any = [];
+
+        for (var i = 0; i < this.config.coingecko.supportedAssets.length; i++) {
+            var ticker: string = this.config.coingecko.supportedAssets[i];
+            var value: any = await this.coingeckoApi.getValue(ticker, "BTC");
+            marketValues.push(value);
+        }
+
+        for (var i = 0; i < this.config.coingecko.supportedCurrencies.length; i++) {
+            var curr: string = this.config.coingecko.supportedCurrencies[i];
+            var value: any = await this.coingeckoApi.getValue("BTC", curr);
+            marketValues.push(value);
+        }
+        this.cachedData.setTempData(this.config.coingecko.sourceShortname, marketValues);
+    }
+    
 }
 
 export { CoinGeckoService }
@@ -44,6 +49,24 @@ export { CoinGeckoService }
 
 
 
+// async download_old() {
+//     Promise.resolve(this.config.coingecko.supportedAssets.map((ticker) => {
+//         return this.coingeckoApi.getValue(ticker, "BTC");
+//     })).then(async (valuePromises) => {
+//         for (var i = 0; i < this.config.coingecko.supportedCurrencies.length; i++) {
+//             var curr: string = this.config.coingecko.supportedCurrencies[i];
+//             valuePromises.push(this.coingeckoApi.getValue("BTC", curr));
+//         }
+
+//         var values : any = [];
+//         for (var i = 0; i < valuePromises.length; i++) {
+//             values.push(await Promise.resolve(valuePromises[i]))
+//             this.helpers.sleep(this.config.coingecko.milliDelayPerRequest)
+//         }
+//         this.cachedData.setTempData(this.config.coingecko.sourceShortname, values);
+//         setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
+//     })
+// }
 
 
 // Promise.resolve(this.config.coingecko.supportedAssets.map((ticker) => {
@@ -52,7 +75,7 @@ export { CoinGeckoService }
         //     for (var i = 0; i < this.config.coingecko.supportedCurrencies.length; i++) {
         //         var curr: string = this.config.coingecko.supportedCurrencies[i];
         //         valuePromises.push(await this.coingeckoApi.getValue("BTC", curr));
-        //         this.helpers.sleep(this.config.coingecko.milliRelayPerRequest*60*1000)
+        //         this.helpers.sleep(this.config.coingecko.milliDelayPerRequest*60*1000)
         //     }
         //     Promise.all(valuePromises).then((values) => {
         //         this.cachedData.setTempData(this.config.coingecko.sourceShortname, values);
@@ -67,7 +90,7 @@ export { CoinGeckoService }
     // download using delay in order to avoid rate limiting in external apis
     // async download2() {
     //     var valuePromises: any = [];
-    //     var rateLimitInMilli: number = (this.config.coingecko.milliRelayPerRequest / 60) * 1000;
+    //     var rateLimitInMilli: number = (this.config.coingecko.milliDelayPerRequest / 60) * 1000;
 
     //     for (var i = 0; i < this.config.coingecko.supportedAssets.length; i++) {
     //         var ticker: string = this.config.coingecko.supportedAssets[i];

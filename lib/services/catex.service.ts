@@ -18,29 +18,59 @@ class CatexService extends GenericDownloaderService {
     }
 
     async download() {
-        Promise.resolve(this.config.catex.supportedAssets.map((ticker) => {
-            return this.catexApi.getValue(ticker, "BTC");
-        })).then(async (valuePromises) => {
-            for (var i = 0; i < this.config.catex.supportedCurrencies.length; i++) {
-                var curr: string = this.config.catex.supportedCurrencies[i];
-                valuePromises.push(this.catexApi.getValue("BTC", curr));
-            }
-
-            var values: any = [];
-            for (var i = 0; i < valuePromises.length; i++) {
-                values.push(await Promise.resolve(valuePromises[i]))
-                this.helpers.sleep(this.config.catex.milliRelayPerRequest)
-            }
-
-            this.cachedData.setTempData(this.config.catex.sourceShortname, values);
-            setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
-        })
+        this.downloadValues();
+        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
     }
+
+    async downloadValues() {
+        var marketValues: any = [];
+
+        for (var i = 0; i < this.config.catex.supportedAssets.length; i++) {
+            var ticker: string = this.config.catex.supportedAssets[i];
+            var value: any = await this.catexApi.getValue(ticker, "BTC");
+            marketValues.push(value);
+            this.helpers.sleep(this.config.catex.milliDelayPerRequest);
+        }
+
+        for (var i = 0; i < this.config.catex.supportedCurrencies.length; i++) {
+            var curr: string = this.config.catex.supportedCurrencies[i];
+            var value: any = await this.catexApi.getValue("BTC", curr);
+            marketValues.push(value);
+            this.helpers.sleep(this.config.catex.milliDelayPerRequest);
+        }
+        this.cachedData.setTempData(this.config.catex.sourceShortname, marketValues);
+    }
+
 }
 
 export { CatexService }
 
 
+
+
+
+
+
+
+// async download() {
+//     Promise.resolve(this.config.catex.supportedAssets.map((ticker) => {
+//         return this.catexApi.getValue(ticker, "BTC");
+//     })).then(async (valuePromises) => {
+//         for (var i = 0; i < this.config.catex.supportedCurrencies.length; i++) {
+//             var curr: string = this.config.catex.supportedCurrencies[i];
+//             valuePromises.push(this.catexApi.getValue("BTC", curr));
+//         }
+
+//         var values: any = [];
+//         for (var i = 0; i < valuePromises.length; i++) {
+//             values.push(await Promise.resolve(valuePromises[i]))
+//             this.helpers.sleep(this.config.catex.milliDelayPerRequest)
+//         }
+
+//         this.cachedData.setTempData(this.config.catex.sourceShortname, values);
+//         setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
+//     })
+// }
 
 
 
@@ -54,7 +84,7 @@ export { CatexService }
     //         for (var i = 0; i < this.config.catex.supportedCurrencies.length; i++) {
     //             var curr: string = this.config.catex.supportedCurrencies[i];
     //             valuePromises.push(await this.catexApi.getValue("BTC", curr));
-    //             this.helpers.sleep(this.config.coingecko.milliRelayPerRequest * 60 * 1000)
+    //             this.helpers.sleep(this.config.coingecko.milliDelayPerRequest * 60 * 1000)
     //         }
     //         Promise.all(valuePromises).then((values) => {
     //             this.cachedData.setTempData(this.config.catex.sourceShortname, values);
@@ -68,7 +98,7 @@ export { CatexService }
     // download using delay in order to avoid rate limiting in external apis
     // async download() {
     //     var valuePromises: any = [];
-    //     var rateLimitInMilli: number = (this.config.catex.milliRelayPerRequest / 60) * 1000;
+    //     var rateLimitInMilli: number = (this.config.catex.milliDelayPerRequest / 60) * 1000;
 
     //     for (var i = 0; i < this.config.catex.supportedAssets.length; i++) {
     //         var ticker: string = this.config.catex.supportedAssets[i];

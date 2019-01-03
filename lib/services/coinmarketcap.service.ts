@@ -23,7 +23,7 @@ class CoinMarketCapService extends GenericDownloaderService {
             var marketValues = await this.coinmarketcapApi.getAllAssets(this.config.coinmarketcap.supportedAssets);
             this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, marketValues);
             console.log(marketValues);
-        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.coinmarketcap.milliRelayPerRequest);
+        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.coinmarketcap.milliDelayPerRequest);
     }
 }
 
@@ -44,7 +44,7 @@ export { CoinMarketCapService }
         //     var values: any = [];
         //     for (var i = 0; i < valuePromises.length; i++) {
         //         values.push(await Promise.resolve(valuePromises[i]))
-        //         this.helpers.sleep(this.config.coinmarketcap.milliRelayPerRequest)
+        //         this.helpers.sleep(this.config.coinmarketcap.milliDelayPerRequest)
         //     }
         //     this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, values);
         //     setInterval(this.download.bind(this), this.config.downloaderDelayInMilliseconds);
