@@ -35,7 +35,14 @@ class PoloniexAPI extends DownloaderAPI {
 
                 for (var i = 0; i < assets.length; i++) {
                     if (assets[i] !== "BTC") {
-                        var tickerKey : string = "BTC_" + assets[i];
+                        var correctedAsset : string;
+                        if (assets[i] === "BCH") {
+                            correctedAsset = "BCHABC";
+                        } else {
+                            correctedAsset = assets[i];
+                        }
+                        
+                        var tickerKey: string = "BTC_" + correctedAsset;
                         var objectKey = assets[i] + ".BTC." + sourceShortname;
                         var quote: any = returnTicker[tickerKey];
                         var price: number = parseFloat(quote.last);

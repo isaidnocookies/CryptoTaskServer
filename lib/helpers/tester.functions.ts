@@ -7,7 +7,7 @@ export class TesterFunctions {
 
     async testAgainstOtherMatrix(url : string, newPriceMatrix : any) {
         var downloadedMatrix : any = await this.downloadMatrix(url);
-        this.compareMatrices(downloadedMatrix, newPriceMatrix);
+        return this.compareMatrices(downloadedMatrix, newPriceMatrix);
     }
     
     downloadMatrix(url : string) : any {
@@ -35,11 +35,14 @@ export class TesterFunctions {
         }
     }
 
-    compareMatrices(baseMatrix : any, otherMatrix : any) {
+    compareMatrices(baseMatrix : any, otherRawMatrix : any) {
         var logger: LoggingFunctions = new LoggingFunctions();
         var failingTest : boolean = false;
         var missingRootKeys : any = {};
         var missingSubKey : any = {};
+        var result: any;
+
+        var otherMatrix: any = JSON.parse(otherRawMatrix);
 
         for (var key in baseMatrix) {
             if (key === "timestamp") {
@@ -87,10 +90,11 @@ export class TesterFunctions {
         }
 
         if (failingTest) {
-            logger.log_fatal("TesterFunctions", "compareMatrices", "Test Failed", "Something is wrong...")
+            result = logger.log_fatal("TesterFunctions", "compareMatrices", "Test Failed", "Something is wrong...")
         } else {
-            logger.log_debug("TesterFunctions", "compareMatrices", "Test PASSED", "Nothing is wrong!")
+            result = logger.log_debug("TesterFunctions", "compareMatrices", "Test PASSED", "Nothing is wrong!")
         }
+        return result;
     }
 
     compareMatrixUrlResponses(matrixOneUrl : string, matrixTwoUrl : string) {

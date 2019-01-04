@@ -15,11 +15,19 @@ class MatrixController {
     config: Config;
     logger: LoggingFunctions;
 
+    tester: TesterFunctions;
+
     constructor () {
         this.config = new Config();
         this.logger = new LoggingFunctions();
         this.memoryController = new MemoryController();
         this.storageController = new StorageController();
+        
+        this.tester = new TesterFunctions();
+    }
+
+    async testAgainstExistingMatrix(url, newMatrix) {
+        return await this.tester.testAgainstOtherMatrix(url, newMatrix);
     }
 
     getPriceMatrix() {

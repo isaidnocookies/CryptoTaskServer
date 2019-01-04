@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { MemoryController } from '../controllers/memory.controller';
 import { MatrixController } from '../controllers/matrix.controller';
 
 export class PriceMatrixRoutes {
-    memoryController : MemoryController;
     matrixController : MatrixController;
 
     constructor() {
-        this.matrixController = new MatrixController();// remove and push to matrix controller...
+        this.matrixController = new MatrixController();
     }
 
     public routes(app): void {
@@ -24,6 +22,13 @@ export class PriceMatrixRoutes {
         app.get('/matrix', (req: Request, res: Response) => {
             this.matrixController.getPriceMatrix().then((matrix) => {
                 res.status(200).send(JSON.parse(matrix));
+            })
+        });
+
+        app.get('/testMatrix', (req: Request, res: Response) => {
+            this.matrixController.getPriceMatrix().then(async (matrix) => {
+                var testResult : any = await this.matrixController.testAgainstExistingMatrix("https://ts.threebx.com/ex/rates", matrix);
+                res.status(200).send({result: testResult});
             })
         });
     }
