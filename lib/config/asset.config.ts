@@ -106,8 +106,8 @@ export class ExternalConfig
     };
 
     catex: any = {
-        sourceShortname: "Catex",
-        sourceName: "CATEX",
+        sourceShortname: "CATEX",
+        sourceName: "Catex",
         supportedAssets: [
             this.assets.SHEL,
             this.assets.BTC

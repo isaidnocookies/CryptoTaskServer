@@ -2,19 +2,16 @@ import { CoinGeckoAPI } from '../api/coingecko.api';
 import { GenericDownloaderService } from './genericDownloader.service';
 import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
-import { CachedData } from "../api/cacheddata.api"
 import { MemoryController } from "../controllers/memory.controller";
 
 class CoinGeckoService extends GenericDownloaderService {
     coingeckoApi: CoinGeckoAPI;
     assetConfig: ExternalConfig;
     helpers: HelperFunctions;
-    cachedData: CachedData;
     memoryController: MemoryController;
 
-    constructor(cachedData) {
+    constructor() {
         super();
-        this.cachedData = cachedData;
         this.coingeckoApi = new CoinGeckoAPI();
         this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();

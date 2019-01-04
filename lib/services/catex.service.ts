@@ -11,9 +11,8 @@ class CatexService extends GenericDownloaderService {
     cachedData: any;
     memoryController: MemoryController;
 
-    constructor(cachedData) {
+    constructor() {
         super();
-        this.cachedData = cachedData;
         this.catexApi = new CatexAPI();
         this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();

@@ -11,9 +11,8 @@ class BitcoinAverageService extends GenericDownloaderService {
     cachedData: any;
     memoryController: MemoryController;
 
-    constructor(cachedData) {
+    constructor() {
         super();
-        this.cachedData = cachedData;
         this.bitcoinaverageApi = new BitcoinAverageAPI();
         this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();

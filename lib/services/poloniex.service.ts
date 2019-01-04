@@ -2,19 +2,16 @@ import { PoloniexAPI } from '../api/poloniex.api';
 import { GenericDownloaderService } from './genericDownloader.service';
 import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
-import { CachedData } from "../api/cacheddata.api"
 import { MemoryController } from "../controllers/memory.controller";
 
 class PoloniexService extends GenericDownloaderService {
     poloniexApi: PoloniexAPI;
     appConfig: ExternalConfig;
     helpers: HelperFunctions;
-    cachedData: CachedData;
     memoryController: MemoryController;
 
-    constructor(cachedData) {
+    constructor() {
         super();
-        this.cachedData = cachedData;
         this.poloniexApi = new PoloniexAPI();
         this.appConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();

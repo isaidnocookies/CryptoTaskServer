@@ -1,29 +1,20 @@
 import { Config } from "../config/config";
 import { MatrixFunctions } from "../helpers/matrix.functions";
-import { CachedData } from "../api/cachedData.api";
-
-import * as mongoose from 'mongoose';
-import { PriceMatrixSchema } from '../models/priceMatrix.model'
-
 import { TesterFunctions } from "../helpers/tester.functions";
 import { LoggingFunctions } from "../helpers/logging.functions";
-
-import { MemoryController } from '../controllers/memory.controller';
+import { MatrixController } from '../controllers/matrix.controller';
 
 class MatrixService {
-
     config: Config;
-    cachedData: CachedData;
     matrixFunctions: MatrixFunctions;
     logger: LoggingFunctions;
-    memoryController : MemoryController;
+    matrixController : MatrixController;
 
-    constructor(cachedData) {
+    constructor() {
         this.config = new Config();
-        this.cachedData = cachedData;
         this.matrixFunctions = new MatrixFunctions();
         this.logger = new LoggingFunctions();
-        this.memoryController = new MemoryController();
+        this.matrixController = new MatrixController();
     }
 
     start() {
@@ -33,7 +24,7 @@ class MatrixService {
     
     async generateMatrixFromRaw() {
         var valueArray: any = [];
-        var rawValues: any = await this.memoryController.getAllMarketValueData();
+        var rawValues: any = await this.matrixController.getCachedPriceDataFromMemory()
         var matrix: any;
 
         for (var key in rawValues) {
@@ -43,32 +34,8 @@ class MatrixService {
         matrix = this.matrixFunctions.generateV1Matrix(valueArray);
 
         // this.checkMatrix(matrix);
-        this.cacheMatrix(matrix);
-        this.saveMatrix(matrix);
-    }
-
-    clearRawData() {
-        this.cachedData.tempData([]);
-    }
-
-    async saveMatrix(matrix) {
-        // save to db
-        if (this.config.saveMatrixToDatabase) {
-            var PriceMatrixObject: any = mongoose.model('PriceMatrixObject', PriceMatrixSchema);
-    
-            try {
-                const priceMatrix = new PriceMatrixObject({ priceMatrix: JSON.stringify(matrix), version: this.config.version, timestamp: matrix.timestamp});
-                return priceMatrix.save().then(() => {
-                    this.logger.log_debug("MatrixService", "saveMatrix", "Matrix saved to DB", "");
-                })
-            } catch (error) {
-                this.logger.log_error("MatrixService", "saveMatrix", "Failed to save to matrix to DB", "");
-            }
-        }
-    }
-
-    cacheMatrix(matrix) {
-        this.cachedData.setKeyValue("PriceMatrix", matrix)
+        this.matrixController.cacheMatrixData(matrix)
+        this.matrixController.saveMatrixData(matrix);
     }
 
     checkMatrix(matrix) {

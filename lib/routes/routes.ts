@@ -1,13 +1,7 @@
 import { Request, Response } from 'express';
-import { BitcoinAverageAPI } from '../api/bitcoinaverage.api';
-
-import { CachedData } from "../api/cachedData.api";
 
 export class Routes {
-    cachedData: CachedData;
-
-    constructor(cachedData) {
-        this.cachedData = cachedData;
+    constructor() {
     }
 
     public routes (app) : void {

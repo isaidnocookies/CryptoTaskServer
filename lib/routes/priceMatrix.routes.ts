@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
-import { CachedData } from "../api/cachedData.api";
+import { MemoryController } from '../controllers/memory.controller';
+import { MatrixController } from '../controllers/matrix.controller';
 
 export class PriceMatrixRoutes {
-    cachedData: CachedData;
+    memoryController : MemoryController;
+    matrixController : MatrixController;
 
-    constructor(cachedData) {
-        this.cachedData = cachedData;
+    constructor() {
+        this.matrixController = new MatrixController();// remove and push to matrix controller...
     }
 
     public routes(app): void {
@@ -14,19 +16,15 @@ export class PriceMatrixRoutes {
         });
 
         app.get('/ex/rates', (req: Request, res: Response) => {
-            var priceMatrix : any = this.getPriceMatrix();
-            res.status(200).send(priceMatrix)
+            this.matrixController.getPriceMatrix().then((matrix) => {
+                res.status(200).send(JSON.parse(matrix));
+            })
         });
 
         app.get('/matrix', (req: Request, res: Response) => {
-            var priceMatrix: any = this.getPriceMatrix();
-            res.status(200).send(priceMatrix)
+            this.matrixController.getPriceMatrix().then((matrix) => {
+                res.status(200).send(JSON.parse(matrix));
+            })
         });
-    }
-
-    private getPriceMatrix() : any {
-        // add db support...
-        var value: any = this.cachedData.getKeyValue("PriceMatrix");
-        return value;
     }
 }

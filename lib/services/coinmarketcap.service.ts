@@ -2,19 +2,16 @@ import { CoinMarketCapAPI } from '../api/coinmarketcap.api';
 import { GenericDownloaderService } from './genericDownloader.service';
 import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
-import { CachedData } from "../api/cacheddata.api"
 import { MemoryController } from "../controllers/memory.controller";
 
 class CoinMarketCapService extends GenericDownloaderService {
     coinmarketcapApi: CoinMarketCapAPI;
     assetConfig: ExternalConfig;
     helpers: HelperFunctions;
-    cachedData: CachedData;
     memoryController: MemoryController;
 
-    constructor(cachedData) {
+    constructor() {
         super();
-        this.cachedData = cachedData;
         this.coinmarketcapApi = new CoinMarketCapAPI();
         this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();

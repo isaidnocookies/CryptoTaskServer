@@ -10,7 +10,6 @@ import { PriceMatrixRoutes } from './routes/priceMatrix.routes';
 import { Config } from "./config/config";
 import { LoggingFunctions } from "./helpers/logging.functions";
 import { DownloaderService } from "./services/downloader.service";
-import { CachedData } from "./api/cachedData.api";
 
 class App {
     // Public variables for application
@@ -18,9 +17,6 @@ class App {
     public router : any;
     public configuration : Config = new Config();
     public server : https.Server;
-
-    // Structure to save price matrix in memory. Updated when new a new price matrix is saved to the db.
-    public cachedData : CachedData = CachedData.getInstance();
 
     // Routes for api
     public baseRoutes : Routes;
@@ -36,9 +32,9 @@ class App {
     constructor() {
         this.app = express();
 
-        this.downloaderService = new DownloaderService(this.cachedData);
-        this.matrixRoutes = new PriceMatrixRoutes(this.cachedData);
-        this.baseRoutes = new Routes(this.cachedData);
+        this.downloaderService = new DownloaderService();
+        this.matrixRoutes = new PriceMatrixRoutes();
+        this.baseRoutes = new Routes();
 
         this.config();
         this.mongoSetup();

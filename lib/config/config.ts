@@ -24,7 +24,8 @@ class Config {
             port: "6379"
         },
         keys : {
-            matrix: "matrixdata"
+            matrix: "matrixdata",
+            sourceKeys: "sourcekeys"
         }
     }
 
