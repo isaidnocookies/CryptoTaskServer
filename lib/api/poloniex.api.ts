@@ -1,5 +1,5 @@
 import { DownloaderAPI } from "./downloader.api";
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 import { LoggingFunctions } from "../helpers/logging.functions";
 
 // Available Ticker Symbols
@@ -7,7 +7,7 @@ import { LoggingFunctions } from "../helpers/logging.functions";
 
 class PoloniexAPI extends DownloaderAPI {
     constructor() {
-        super(new Config());
+        super(new ExternalConfig());
         this.setSource(this.config.poloniex.sourceName, this.config.poloniex.sourceShortname);
     }
 

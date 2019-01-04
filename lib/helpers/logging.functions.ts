@@ -1,4 +1,4 @@
-import { Config } from "../config/config";
+import { Config, ExternalConfig } from "../config/config";
 
 export class LoggingFunctions {
     

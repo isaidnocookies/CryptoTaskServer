@@ -1,4 +1,4 @@
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 
 export class MatrixFunctions {
 
@@ -20,7 +20,7 @@ export class MatrixFunctions {
     { 'BTC.MXN.BTCAVG': 72291.62 }]
     */
 
-    config : Config = new Config();
+    config : ExternalConfig = new ExternalConfig();
 
     generateV1Matrix(values : any) : any {
         var theMatrix : any = {};

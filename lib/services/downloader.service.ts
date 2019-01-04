@@ -1,4 +1,3 @@
-import { Config } from "../config/config";
 import { CachedData } from "../api/cacheddata.api"
 
 import { BitcoinAverageService } from './bitcoinaverage.service';
@@ -17,9 +16,8 @@ class DownloaderService {
     coingeckoService: CoinGeckoService;
     coinmarketcapService: CoinMarketCapService;
     poloniexService: PoloniexService;
-    matrixService: MatrixService;
 
-    config: any = new Config();
+    matrixService: MatrixService;
 
     downloaderServices : any = [];
 
@@ -43,8 +41,8 @@ class DownloaderService {
     downloadMarketValues() {
         this.bitcoinaverageService.download();
         this.poloniexService.download();
-        this.catexService.download();
-        this.coingeckoService.download(); // needs work
+        // this.catexService.download();
+        // this.coingeckoService.download(); // needs work
 
         // add coinmarketcap when api key is paid for to fit our needs
         // this.coinmarketcapService.download();

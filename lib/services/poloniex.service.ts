@@ -1,28 +1,35 @@
 import { PoloniexAPI } from '../api/poloniex.api';
 import { GenericDownloaderService } from './genericDownloader.service';
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
 import { CachedData } from "../api/cacheddata.api"
+import { MemoryController } from "../controllers/memory.controller";
 
 class PoloniexService extends GenericDownloaderService {
     poloniexApi: PoloniexAPI;
-    config: Config;
+    appConfig: ExternalConfig;
     helpers: HelperFunctions;
     cachedData: CachedData;
+    memoryController: MemoryController;
 
     constructor(cachedData) {
         super();
         this.cachedData = cachedData;
         this.poloniexApi = new PoloniexAPI();
-        this.config = new Config();
+        this.appConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();
+        this.memoryController = new MemoryController();
     }
 
     async download() {
         setInterval(async function downloadAll() {
-            var marketValues = await this.poloniexApi.getAllAssets(this.config.poloniex.supportedAssets);
-            this.cachedData.setTempData(this.config.poloniex.sourceShortname, marketValues);
-        }.bind(this), this.config.downloaderDelayInMilliseconds + this.config.poloniex.milliDelayPerRequest);
+            var marketValues = await this.poloniexApi.getAllAssets(this.appConfig.poloniex.supportedAssets);
+            this.cacheData(marketValues);
+        }.bind(this), this.appConfig.downloaderDelayInMilliseconds + this.appConfig.poloniex.milliDelayPerRequest);
+    }
+
+    private cacheData(values) {
+        this.memoryController.saveDataFromSource(values, this.appConfig.poloniex.sourceShortname);
     }
 }
 

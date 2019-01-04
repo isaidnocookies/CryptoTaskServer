@@ -1,45 +1,50 @@
 import { CoinGeckoAPI } from '../api/coingecko.api';
 import { GenericDownloaderService } from './genericDownloader.service';
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
 import { CachedData } from "../api/cacheddata.api"
+import { MemoryController } from "../controllers/memory.controller";
 
 class CoinGeckoService extends GenericDownloaderService {
     coingeckoApi: CoinGeckoAPI;
-    config: Config;
+    assetConfig: ExternalConfig;
     helpers: HelperFunctions;
     cachedData: CachedData;
+    memoryController: MemoryController;
 
     constructor(cachedData) {
         super();
         this.cachedData = cachedData;
         this.coingeckoApi = new CoinGeckoAPI();
-        this.config = new Config();
+        this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();
+        this.memoryController = new MemoryController();
     }
 
     download() {
         this.downloadValues();
-        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
+        setInterval(this.downloadValues.bind(this), this.assetConfig.downloaderDelayInMilliseconds);
     }
 
     async downloadValues() {
         var marketValues: any = [];
 
-        for (var i = 0; i < this.config.coingecko.supportedAssets.length; i++) {
-            var ticker: string = this.config.coingecko.supportedAssets[i];
+        for (var i = 0; i < this.assetConfig.coingecko.supportedAssets.length; i++) {
+            var ticker: string = this.assetConfig.coingecko.supportedAssets[i];
             var value: any = await this.coingeckoApi.getValue(ticker, "BTC");
             marketValues.push(value);
         }
 
-        for (var i = 0; i < this.config.coingecko.supportedCurrencies.length; i++) {
-            var curr: string = this.config.coingecko.supportedCurrencies[i];
+        for (var i = 0; i < this.assetConfig.coingecko.supportedCurrencies.length; i++) {
+            var curr: string = this.assetConfig.coingecko.supportedCurrencies[i];
             var value: any = await this.coingeckoApi.getValue("BTC", curr);
             marketValues.push(value);
         }
-        this.cachedData.setTempData(this.config.coingecko.sourceShortname, marketValues);
+        this.cacheData(marketValues);
     }
-    
+    private cacheData(values) {
+        this.memoryController.saveDataFromSource(values, this.assetConfig.coingecko.sourceShortname);
+    }
 }
 
 export { CoinGeckoService }

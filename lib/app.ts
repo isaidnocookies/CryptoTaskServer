@@ -16,7 +16,7 @@ class App {
     // Public variables for application
     public app : express.Application;
     public router : any;
-    public configuration : any = new Config();
+    public configuration : Config = new Config();
     public server : https.Server;
 
     // Structure to save price matrix in memory. Updated when new a new price matrix is saved to the db.
@@ -32,7 +32,7 @@ class App {
     // MongoDB route
     public mongoUrl : string = (this.configuration.localEnvironment ? this.configuration.db.test.url : this.configuration.db.production.url);
 
-    // Constructor for express app. Configures server and starts the listening process
+    // Constructor for express app. Config, ExternalConfigures server and starts the listening process
     constructor() {
         this.app = express();
 
@@ -63,7 +63,7 @@ class App {
         this.matrixRoutes.routes(this.app);
     }
     
-    // Configure express app with middleware
+    // Config, ExternalConfigure express app with middleware
     private config(): void {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));

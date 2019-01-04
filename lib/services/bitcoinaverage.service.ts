@@ -1,42 +1,49 @@
 import { BitcoinAverageAPI } from '../api/bitcoinaverage.api';
 import { GenericDownloaderService } from './genericDownloader.service';
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
+import { MemoryController } from "../controllers/memory.controller";
 
 class BitcoinAverageService extends GenericDownloaderService {
-    bitcoinaverageApi : any;
-    config: any;
-    helpers: any;
+    bitcoinaverageApi: BitcoinAverageAPI;
+    assetConfig: ExternalConfig;
+    helpers: HelperFunctions;
     cachedData: any;
+    memoryController: MemoryController;
 
     constructor(cachedData) {
         super();
         this.cachedData = cachedData;
         this.bitcoinaverageApi = new BitcoinAverageAPI();
-        this.config = new Config();
+        this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();
+        this.memoryController = new MemoryController();
     }
 
     async download() {
         this.downloadValues();
-        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
+        setInterval(this.downloadValues.bind(this), this.assetConfig.downloaderDelayInMilliseconds);
     }
 
     async downloadValues() {
         var marketValues: any = [];
 
-        for (var i = 0; i < this.config.bitcoinaverage.supportedAssets.length; i++) {
-            var ticker: string = this.config.bitcoinaverage.supportedAssets[i];
+        for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedAssets.length; i++) {
+            var ticker: string = this.assetConfig.bitcoinaverage.supportedAssets[i];
             var value: any = await this.bitcoinaverageApi.getValue(ticker, "BTC");
             marketValues.push(value);
         }
 
-        for (var i = 0; i < this.config.bitcoinaverage.supportedCurrencies.length; i++) {
-            var curr: string = this.config.bitcoinaverage.supportedCurrencies[i];
+        for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedCurrencies.length; i++) {
+            var curr: string = this.assetConfig.bitcoinaverage.supportedCurrencies[i];
             var value: any = await this.bitcoinaverageApi.getValue("BTC", curr);
             marketValues.push(value);
         }
-        this.cachedData.setTempData(this.config.bitcoinaverage.sourceShortname, marketValues);
+        this.cacheData(marketValues);
+    }
+    
+    private cacheData(values) {
+        this.memoryController.saveDataFromSource(values, this.assetConfig.bitcoinaverage.sourceShortname);
     }
 
 

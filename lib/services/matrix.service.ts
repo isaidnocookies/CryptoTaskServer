@@ -8,18 +8,22 @@ import { PriceMatrixSchema } from '../models/priceMatrix.model'
 import { TesterFunctions } from "../helpers/tester.functions";
 import { LoggingFunctions } from "../helpers/logging.functions";
 
+import { MemoryController } from '../controllers/memory.controller';
+
 class MatrixService {
 
     config: Config;
     cachedData: CachedData;
     matrixFunctions: MatrixFunctions;
     logger: LoggingFunctions;
+    memoryController : MemoryController;
 
     constructor(cachedData) {
         this.config = new Config();
         this.cachedData = cachedData;
         this.matrixFunctions = new MatrixFunctions();
         this.logger = new LoggingFunctions();
+        this.memoryController = new MemoryController();
     }
 
     start() {
@@ -27,9 +31,9 @@ class MatrixService {
         setInterval(this.generateMatrixFromRaw.bind(this), 5000);
     }
     
-    generateMatrixFromRaw() {
+    async generateMatrixFromRaw() {
         var valueArray: any = [];
-        var rawValues : any = this.cachedData.tempData;
+        var rawValues: any = await this.memoryController.getAllMarketValueData();
         var matrix: any;
 
         for (var key in rawValues) {

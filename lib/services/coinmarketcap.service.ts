@@ -1,33 +1,39 @@
 import { CoinMarketCapAPI } from '../api/coinmarketcap.api';
 import { GenericDownloaderService } from './genericDownloader.service';
-import { Config } from "../config/config";
+import { ExternalConfig } from "../config/config";
 import { HelperFunctions } from "../helpers/helper.functions";
 import { CachedData } from "../api/cacheddata.api"
+import { MemoryController } from "../controllers/memory.controller";
 
 class CoinMarketCapService extends GenericDownloaderService {
     coinmarketcapApi: CoinMarketCapAPI;
-    config: Config;
+    assetConfig: ExternalConfig;
     helpers: HelperFunctions;
     cachedData: CachedData;
+    memoryController: MemoryController;
 
     constructor(cachedData) {
         super();
         this.cachedData = cachedData;
         this.coinmarketcapApi = new CoinMarketCapAPI();
-        this.config = new Config();
+        this.assetConfig = new ExternalConfig();
         this.helpers = new HelperFunctions();
+        this.memoryController = new MemoryController();
     }
 
     download() {
         this.downloadValues();
-        setInterval(this.downloadValues.bind(this), this.config.downloaderDelayInMilliseconds);
+        setInterval(this.downloadValues.bind(this), this.assetConfig.downloaderDelayInMilliseconds);
     }
 
     async downloadValues() {
-        var values : any = await this.coinmarketcapApi.getAllAssets(this.config.coinmarketcap.supportedAssets);
-        this.cachedData.setTempData(this.config.coinmarketcap.sourceShortname, values);
+        var values: any = await this.coinmarketcapApi.getAllAssets(this.assetConfig.coinmarketcap.supportedAssets);
+        this.cacheData(values);
     }
 
+    private cacheData(values) {
+        this.memoryController.saveDataFromSource(values, this.assetConfig.coinmarketcap.sourceShortname);
+    }
 }
 
 export { CoinMarketCapService }
