@@ -8,12 +8,13 @@ export class SlackNotificationAPI {
     }
     
     sendSlackMessage(message, level) {
-        if (level === "Fatal") {
-            return this.sendFatalMessage(message);
-        } else {
-            // Level === Error
-            return this.sendErrorMessage(message);
-        }
+        console.log("Support coming...");
+        // if (level === "Fatal") {
+        //     return this.sendFatalMessage(message);
+        // } else {
+        //     // Level === Error
+        //     return this.sendErrorMessage(message);
+        // }
     }
 
     async sendErrorMessage(logInfo) {

@@ -3,6 +3,7 @@ import { SlackNotificationAPI } from "../api/notifications/slack.notification.ap
 
 export class LoggingFunctions {
     config : Config;
+    slack: SlackNotificationAPI;
 
     constructor() {
         this.config = new Config();
@@ -19,7 +20,7 @@ export class LoggingFunctions {
     log_error(class_name : string, function_name : string, short_text : string, description : string) {
         var log: any = { type: "Error", class_name: class_name, function_name: function_name, short_text: short_text, description: description, timestamp: new Date().toString() };
         console.log(log);
-
+        this.slack.sendSlackMessage(log, log.type);
         return log;
     }
 
