@@ -27,34 +27,32 @@ class CatexService extends GenericDownloaderService {
     async downloadValues() {
         var marketValues: any = [];
 
-        for (var i = 0; i < this.assetConfig.catex.supportedAssets.length; i++) {
-            var ticker: string = this.assetConfig.catex.supportedAssets[i];
-            var value: any = await this.catexApi.getValue(ticker, "BTC");
-            marketValues.push(value);
-            this.helpers.sleep(this.assetConfig.catex.milliDelayPerRequest);
-        }
+        try {
+            for (var i = 0; i < this.assetConfig.catex.supportedAssets.length; i++) {
+                var ticker: string = this.assetConfig.catex.supportedAssets[i];
+                var value: any = await this.catexApi.getValue(ticker, "BTC");
+                marketValues.push(value);
+                this.helpers.sleep(this.assetConfig.catex.milliDelayPerRequest);
+            }
 
-        for (var i = 0; i < this.assetConfig.catex.supportedCurrencies.length; i++) {
-            var curr: string = this.assetConfig.catex.supportedCurrencies[i];
-            var value: any = await this.catexApi.getValue("BTC", curr);
-            marketValues.push(value);
-            this.helpers.sleep(this.assetConfig.catex.milliDelayPerRequest);
+            for (var i = 0; i < this.assetConfig.catex.supportedCurrencies.length; i++) {
+                var curr: string = this.assetConfig.catex.supportedCurrencies[i];
+                var value: any = await this.catexApi.getValue("BTC", curr);
+                marketValues.push(value);
+                this.helpers.sleep(this.assetConfig.catex.milliDelayPerRequest);
+            }
+            this.cacheData(marketValues);
+        } catch (error) {
+            this.logger.log_fatal("CatexService", "download", "Failed to download", error);
         }
-        this.cacheData(marketValues);
     }
 
     private cacheData(values) {
         this.memoryController.saveDataFromSource(values, this.assetConfig.catex.sourceShortname);
     }
-
 }
 
 export { CatexService }
-
-
-
-
-
 
 
 

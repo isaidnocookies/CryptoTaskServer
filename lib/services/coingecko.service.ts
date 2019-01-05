@@ -25,19 +25,22 @@ class CoinGeckoService extends GenericDownloaderService {
 
     async downloadValues() {
         var marketValues: any = [];
+        try {
+            for (var i = 0; i < this.assetConfig.coingecko.supportedAssets.length; i++) {
+                var ticker: string = this.assetConfig.coingecko.supportedAssets[i];
+                var value: any = await this.coingeckoApi.getValue(ticker, "BTC");
+                marketValues.push(value);
+            }
 
-        for (var i = 0; i < this.assetConfig.coingecko.supportedAssets.length; i++) {
-            var ticker: string = this.assetConfig.coingecko.supportedAssets[i];
-            var value: any = await this.coingeckoApi.getValue(ticker, "BTC");
-            marketValues.push(value);
+            for (var i = 0; i < this.assetConfig.coingecko.supportedCurrencies.length; i++) {
+                var curr: string = this.assetConfig.coingecko.supportedCurrencies[i];
+                var value: any = await this.coingeckoApi.getValue("BTC", curr);
+                marketValues.push(value);
+            }
+            this.cacheData(marketValues);
+        } catch(error) {
+            this.logger.log_fatal("CoinGeckoService", "download", "Failed to download", error);
         }
-
-        for (var i = 0; i < this.assetConfig.coingecko.supportedCurrencies.length; i++) {
-            var curr: string = this.assetConfig.coingecko.supportedCurrencies[i];
-            var value: any = await this.coingeckoApi.getValue("BTC", curr);
-            marketValues.push(value);
-        }
-        this.cacheData(marketValues);
     }
     private cacheData(values) {
         this.memoryController.saveDataFromSource(values, this.assetConfig.coingecko.sourceShortname);

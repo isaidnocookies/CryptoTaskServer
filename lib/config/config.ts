@@ -4,6 +4,11 @@ class Config {
     version: string = "0.0.1"
     localEnvironment: boolean = true;
     port: number = 3333;
+    debug: boolean = true;
+
+    constructor() {
+        // INit stuffs...
+    }
 
     db: any = {
         production: {
@@ -29,7 +34,12 @@ class Config {
         }
     }
 
-    saveMatrixToDatabase: boolean = false;
+    saveMatrixToDatabase: boolean = true;
+
+    slackWebhooks = {
+        taskserver: ""//"https://hooks.slack.com/services/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"
+    }
+
 }
 
 export { Config, ExternalConfig };

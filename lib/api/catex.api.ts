@@ -1,19 +1,14 @@
 import { DownloaderAPI } from "./downloader.api";
-import { ExternalConfig } from "../config/config";
 import { LoggingFunctions } from "../helpers/logging.functions";
-
-// Available Ticker Symbols
-// https://github.com/catex/catex_exchange_api/wiki/Acquire-specific-trading-pair-volume-and-price
 
 class CatexAPI extends DownloaderAPI {
     constructor() {
-        super(new ExternalConfig());
+        super();
         this.setSource(this.config.catex.sourceName, this.config.catex.sourceShortname);
     }
 
     getValue(asset: string, base: string) {
         const axios: any = require('axios');
-        var cryptoJS: any = require("crypto-js");
         const logger: any = new LoggingFunctions();
 
         var url: string = "";

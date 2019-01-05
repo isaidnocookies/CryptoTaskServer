@@ -20,8 +20,12 @@ class PoloniexService extends GenericDownloaderService {
 
     async download() {
         setInterval(async function downloadAll() {
-            var marketValues = await this.poloniexApi.getAllAssets(this.appConfig.poloniex.supportedAssets);
-            this.cacheData(marketValues);
+            try {
+                var marketValues = await this.poloniexApi.getAllAssets(this.appConfig.poloniex.supportedAssets);
+                this.cacheData(marketValues);
+            } catch (error) {
+                this.logger.log_fatal("PoloniexService", "download", "Failed to download", error);
+            }
         }.bind(this), this.appConfig.downloaderDelayInMilliseconds + this.appConfig.poloniex.milliDelayPerRequest);
     }
 

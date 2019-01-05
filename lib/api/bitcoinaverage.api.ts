@@ -1,13 +1,9 @@
 import { DownloaderAPI } from "./downloader.api";
-import { ExternalConfig } from "../config/config";
 import { LoggingFunctions } from "../helpers/logging.functions";
-
-// Available Ticker Symbols
-// https://apiv2.bitcoinaverage.com/symbols/indices/ticker
 
 class BitcoinAverageAPI extends DownloaderAPI {
     constructor() {
-        super(new ExternalConfig);
+        super();
         this.setSource(this.config.bitcoinaverage.sourceName, this.config.bitcoinaverage.sourceShortname);
     }
 
@@ -45,9 +41,15 @@ class BitcoinAverageAPI extends DownloaderAPI {
         var secret_key = this.config.bitcoinaverage.apiSecretKey;
         var timestamp = Math.floor(Date.now() / 1000);
         var payload = timestamp + '.' + public_key;
-        var hash = cryptoJS.HmacSHA256(payload, secret_key);
-        var hex_hash = cryptoJS.enc.Hex.stringify(hash);
-        var signature = payload + "." + hex_hash;
+
+        try {
+            var hash = cryptoJS.HmacSHA256(payload, secret_key);
+            var hex_hash = cryptoJS.enc.Hex.stringify(hash);
+            var signature = payload + "." + hex_hash;
+        } catch (error) {
+            logger.log_error("BitcoinAverageAPI", "getValue", "While signing signature", error)
+            return [];
+        }
 
         try {
             return axios({
@@ -97,9 +99,15 @@ class BitcoinAverageAPI extends DownloaderAPI {
         var secret_key = this.config.bitcoinaverage.apiSecretKey;
         var timestamp = Math.floor(Date.now() / 1000);
         var payload = timestamp + '.' + public_key;
-        var hash = cryptoJS.HmacSHA256(payload, secret_key);
-        var hex_hash = cryptoJS.enc.Hex.stringify(hash);
-        var signature = payload + "." + hex_hash;
+
+        try {
+            var hash = cryptoJS.HmacSHA256(payload, secret_key);
+            var hex_hash = cryptoJS.enc.Hex.stringify(hash);
+            var signature = payload + "." + hex_hash;
+        } catch (error) {
+            logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "While signing signature", error)
+            return [];
+        }
 
         try {
             return axios({
@@ -122,22 +130,22 @@ class BitcoinAverageAPI extends DownloaderAPI {
                         var price: number = quote.last;
                         values.push({ [objectKey]: price });
                     } catch (error) {
-                        logger.log_error("BitcoinAverageAPI", "getAllAssets", "While parsing response : " + assets[i], error)
+                        logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "While parsing response : " + assets[i], error)
                     }
                 }
                 return values;
             }).catch(function (error) {
                 if (error.response) {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "From Response", error.response)
+                    logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "From Response", error.response)
                 } else if (error.request) {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [No Response]", error.request)
+                    logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "Failed [No Response]", error.request)
                 } else {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [Request Error]", error.message)
+                    logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "Failed [Request Error]", error.message)
                 }
                 return [];
             });
         } catch (error) {
-            logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [Try Failed]", error)
+            logger.log_error("BitcoinAverageAPI", "getAllTokenAssets", "Failed [Try Failed]", error)
             return [];
         }
     }
@@ -170,9 +178,15 @@ class BitcoinAverageAPI extends DownloaderAPI {
         var secret_key = this.config.bitcoinaverage.apiSecretKey;
         var timestamp = Math.floor(Date.now() / 1000);
         var payload = timestamp + '.' + public_key;
-        var hash = cryptoJS.HmacSHA256(payload, secret_key);
-        var hex_hash = cryptoJS.enc.Hex.stringify(hash);
-        var signature = payload + "." + hex_hash;
+        
+        try {
+            var hash = cryptoJS.HmacSHA256(payload, secret_key);
+            var hex_hash = cryptoJS.enc.Hex.stringify(hash);
+            var signature = payload + "." + hex_hash;
+        } catch (error) {
+            logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "While signing signature", error)
+            return [];
+        }
 
         try {
             return axios({
@@ -194,22 +208,22 @@ class BitcoinAverageAPI extends DownloaderAPI {
                         var price : number = quote.last;
                         values.push({[objectKey] : price});
                     } catch (error) {
-                        logger.log_error("BitcoinAverageAPI", "getAllAssets", "While parsing response : " + assets[i], error)
+                        logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "While parsing response : " + assets[i], error)
                     }
                 }
                 return values;
             }).catch(function (error) {
                 if (error.response) {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "From Response", error.response)
+                    logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "From Response", error.response)
                 } else if (error.request) {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [No Response]", error.request)
+                    logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "Failed [No Response]", error.request)
                 } else {
-                    logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [Request Error]", error.message)
+                    logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "Failed [Request Error]", error.message)
                 }
                 return [];
             });
         } catch (error) {
-            logger.log_error("BitcoinAverageAPI", "getAllAssets", "Failed [Try Failed]", error)
+            logger.log_error("BitcoinAverageAPI", "getAllCryptoAssets", "Failed [Try Failed]", error)
             return [];
         }
     }

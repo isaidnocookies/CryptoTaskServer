@@ -13,12 +13,14 @@ export class ExternalConfig
         NIKO: "NIKO",
         RMT: "RMT",
         SHEL: "SHEL",
+        TKS: "TKS",
         XLM: "XLM",
         XMR: "XMR",
         XRP: "XRP",
         ZEC: "ZEC",
         ZEN: "ZEN",
-        ZRX: "ZRX"
+        ZRX: "ZRX",
+        WAVES: "WAVES"
     };
 
     currencies : any = {
@@ -30,6 +32,8 @@ export class ExternalConfig
         THDL: {symbol: "THDL", price: 0.01, base: this.currencies.USD}
     }
 
+    // Available Ticker Symbols
+    // https://apiv2.bitcoinaverage.com/symbols/indices/ticker
     bitcoinaverage : any = {
         sourceShortname : "BTCAVG",
         sourceName: "BitcoinAverage",
@@ -41,6 +45,7 @@ export class ExternalConfig
             this.assets.DOGE,
             this.assets.ETH,
             this.assets.LTC,
+            this.assets.WAVES,
             this.assets.XLM,
             this.assets.XMR,
             this.assets.XRP,
@@ -67,7 +72,8 @@ export class ExternalConfig
             this.assets.BTC,
             this.assets.NIKO,
             this.assets.RMT,
-            // this.assets.SHEL,
+            this.assets.TKS,
+            this.assets.WAVES,
             this.assets.ZEN
         ],
         supportedCurrencies: [
@@ -79,7 +85,9 @@ export class ExternalConfig
             NIKO: "niko",
             RMT: "sureremit",
             SHEL: "shelterdao",
-            ZEN: "zencash"
+            ZEN: "zencash",
+            WAVES: "waves",
+            TKS: "tokes"
         },
         milliDelayPerRequest: 250
     };
@@ -105,6 +113,8 @@ export class ExternalConfig
         apiKey: "e672675d-3393-4160-832f-6135253a5451"
     };
 
+    // Available Ticker Symbols
+    // https://github.com/catex/catex_exchange_api/wiki/Acquire-specific-trading-pair-volume-and-price
     catex: any = {
         sourceShortname: "CATEX",
         sourceName: "Catex",
@@ -117,6 +127,7 @@ export class ExternalConfig
         milliDelayPerRequest: 1000
     }
 
+    //https://poloniex.com/public?command=returnTicker
     poloniex: any = {
         sourceShortname: "POL",
         sourceName: "Poloniex",

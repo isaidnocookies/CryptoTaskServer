@@ -8,7 +8,6 @@ class BitcoinAverageService extends GenericDownloaderService {
     bitcoinaverageApi: BitcoinAverageAPI;
     assetConfig: ExternalConfig;
     helpers: HelperFunctions;
-    cachedData: any;
     memoryController: MemoryController;
 
     constructor() {
@@ -26,19 +25,23 @@ class BitcoinAverageService extends GenericDownloaderService {
 
     async downloadValues() {
         var marketValues: any = [];
+        
+        try {
+            for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedAssets.length; i++) {
+                var ticker: string = this.assetConfig.bitcoinaverage.supportedAssets[i];
+                var value: any = await this.bitcoinaverageApi.getValue(ticker, "BTC");
+                marketValues.push(value);
+            }
 
-        for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedAssets.length; i++) {
-            var ticker: string = this.assetConfig.bitcoinaverage.supportedAssets[i];
-            var value: any = await this.bitcoinaverageApi.getValue(ticker, "BTC");
-            marketValues.push(value);
+            for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedCurrencies.length; i++) {
+                var curr: string = this.assetConfig.bitcoinaverage.supportedCurrencies[i];
+                var value: any = await this.bitcoinaverageApi.getValue("BTC", curr);
+                marketValues.push(value);
+            }
+            this.cacheData(marketValues);
+        } catch (error) {
+            this.logger.log_fatal("BitcoinAverageService", "download", "Failed to download", error);
         }
-
-        for (var i = 0; i < this.assetConfig.bitcoinaverage.supportedCurrencies.length; i++) {
-            var curr: string = this.assetConfig.bitcoinaverage.supportedCurrencies[i];
-            var value: any = await this.bitcoinaverageApi.getValue("BTC", curr);
-            marketValues.push(value);
-        }
-        this.cacheData(marketValues);
     }
     
     private cacheData(values) {

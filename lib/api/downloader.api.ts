@@ -1,10 +1,15 @@
+import { LoggingFunctions } from "../helpers/logging.functions";
+import { ExternalConfig } from "../config/config";
+
 abstract class DownloaderAPI {
     source: string;
     sourceShortname: string;
-    config: any;
+    config: ExternalConfig;
+    logger: LoggingFunctions;
 
-    constructor(config: any) {
-        this.config = config;
+    constructor() {
+        this.config = new ExternalConfig();
+        this.logger = new LoggingFunctions();
     }
 
     abstract getValue(asset : string, base : string) : any;

@@ -1,32 +1,34 @@
 import { ExternalConfig } from "../config/config";
 
+/// EXPECTED FORMAT FOR VALUES into MATRIX FUNCTION
+/// {ASSET.BASE.SOURCESHORTNAME : VALUE }
+/*
+[{ 'BCH.BTC.BTCAVG': 0.042539404118390314 },
+{ 'BTC.BTC.BTCAVG': 1 },
+{ 'DASH.BTC.BTCAVG': 0.021008569533892574 },
+{ 'DGB.BTC.BTCAVG': 0.0000027465685262025616 },
+{ 'DOGE.BTC.BTCAVG': 6.3e-7 },
+{ 'ETH.BTC.BTCAVG': 0.03595636802150574 },
+{ 'LTC.BTC.BTCAVG': 0.008201585344035643 },
+{ 'XLM.BTC.BTCAVG': 0.000030173203324851446 },
+{ 'XMR.BTC.BTCAVG': 0.012382553286596057 },
+{ 'ZEC.BTC.BTCAVG': 0.015263711734965154 },
+{ 'ZRX.BTC.BTCAVG': 0.00008170946908468219 },
+{ 'BTC.USD.BTCAVG': 3735.450556935403 },
+{ 'BTC.MXN.BTCAVG': 72291.62 }]
+*/
+
 export class MatrixFunctions {
-
-    /// EXPECTED FORMAT FOR VALUES into MATRIX FUNCTION
-    /// {ASSET.BASE.SOURCESHORTNAME : VALUE }
-    /*
-    [{ 'BCH.BTC.BTCAVG': 0.042539404118390314 },
-    { 'BTC.BTC.BTCAVG': 1 },
-    { 'DASH.BTC.BTCAVG': 0.021008569533892574 },
-    { 'DGB.BTC.BTCAVG': 0.0000027465685262025616 },
-    { 'DOGE.BTC.BTCAVG': 6.3e-7 },
-    { 'ETH.BTC.BTCAVG': 0.03595636802150574 },
-    { 'LTC.BTC.BTCAVG': 0.008201585344035643 },
-    { 'XLM.BTC.BTCAVG': 0.000030173203324851446 },
-    { 'XMR.BTC.BTCAVG': 0.012382553286596057 },
-    { 'ZEC.BTC.BTCAVG': 0.015263711734965154 },
-    { 'ZRX.BTC.BTCAVG': 0.00008170946908468219 },
-    { 'BTC.USD.BTCAVG': 3735.450556935403 },
-    { 'BTC.MXN.BTCAVG': 72291.62 }]
-    */
-
     config : ExternalConfig = new ExternalConfig();
 
-    generateV1Matrix(values : any) : any {
-        var theMatrix : any = {};
-
+    generateV1Matrix(values: any): any {
         var flattenedValues: any = [].concat.apply([], values);
         var valueMap : any = this.generateValueMap(flattenedValues);
+        return this.generateCompleteMatrix(valueMap);
+    }
+    
+    generateCompleteMatrix(valueMap : any) : any {
+        var theMatrix : any = {};
         var flattentedMap : any = this.flattenValueMap(valueMap);
 
         const allAssets = Object.assign({}, this.config.assets, this.config.currencies, this.config.fixedTokens);

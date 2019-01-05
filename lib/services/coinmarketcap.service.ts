@@ -24,8 +24,12 @@ class CoinMarketCapService extends GenericDownloaderService {
     }
 
     async downloadValues() {
-        var values: any = await this.coinmarketcapApi.getAllAssets(this.assetConfig.coinmarketcap.supportedAssets);
-        this.cacheData(values);
+        try {
+            var values: any = await this.coinmarketcapApi.getAllAssets(this.assetConfig.coinmarketcap.supportedAssets);
+            this.cacheData(values);
+        } catch(error) {
+            this.logger.log_fatal("BitcoinAverageService", "download", "Failed to download", error);
+        }
     }
 
     private cacheData(values) {

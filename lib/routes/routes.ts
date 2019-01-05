@@ -6,16 +6,12 @@ export class Routes {
 
     public routes (app) : void {
         app.route('/').get((req: Request, res: Response) => {
-            res.status(200).send({message: "Threshodl get!"})
+            res.status(200).send({message: "Buzz buzz!"})
         });
 
         app.post('/', (req: Request, res: Response) => {
             const data = req.body.data;
-            res.status(200).send({message: "Hello, world " + data})
-        });
-
-        app.post('/test', (req: Request, res: Response) => {
-            res.status(200).send({message: "Test"});
+            res.status(200).send({message: "Hello, world!"})
         });
     }
 }

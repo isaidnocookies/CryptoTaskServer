@@ -54,14 +54,8 @@ class MemoryController {
             return matrix;
         } catch (error) {
             this.logger.log_fatal("MemoryController", "getPriceMatrix", "Client failed to get price matrix!", error)
+            return false;
         }
-        // return this.redisClient.get(this.config.redis.keys.matrix, function (error, matrix) {
-        //     if (error) {
-        //         this.logger.log_fatal("MemoryController", "getPriceMatrix", "Client failed to get price matrix!", error)
-        //         return {};
-        //     }
-        //     return matrix;
-        // });
     }
     
     // potentially look at forcing the key to expire after a period of time.

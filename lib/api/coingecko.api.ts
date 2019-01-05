@@ -1,12 +1,11 @@
 import { DownloaderAPI } from "./downloader.api";
-import { ExternalConfig } from "../config/config";
 import { LoggingFunctions } from "../helpers/logging.functions";
 
 // Available Ticker Symbols
 
 class CoinGeckoAPI extends DownloaderAPI {
     constructor() {
-        super(new ExternalConfig());
+        super();
         this.setSource(this.config.coingecko.sourceName, this.config.coingecko.sourceShortname);
     }
 

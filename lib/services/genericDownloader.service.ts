@@ -1,5 +1,12 @@
+import { LoggingFunctions } from "../helpers/logging.functions";
+
 abstract class GenericDownloaderService {
-    // Add details on formatting and how to save the data
+    logger : LoggingFunctions;
+
+    constructor() {
+        this.logger = new LoggingFunctions();
+    }
+    // Add details on formatting and show to save the data
     abstract download() : any;
 }
 

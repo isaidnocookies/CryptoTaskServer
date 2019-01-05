@@ -19,28 +19,27 @@ class MatrixService {
 
     start() {
         this.logger.log_debug("MatrixService", "start", "MatrixService started", "");
-        setInterval(this.generateMatrixFromRaw.bind(this), 5000);
+        setInterval(this.generateMatrixFromRaw.bind(this), 10000);
     }
     
     async generateMatrixFromRaw() {
         var valueArray: any = [];
         var rawValues: any = await this.matrixController.getCachedPriceDataFromMemory()
-        var matrix: any;
 
         for (var key in rawValues) {
             valueArray.push(rawValues[key]);
         }
 
-        matrix = this.matrixFunctions.generateV1Matrix(valueArray);
+        var flattenedValues: any = [].concat.apply([], valueArray);
+        var valueMap: any = this.matrixFunctions.generateValueMap(flattenedValues);
+        var coins : any = Object.keys(valueMap);
+        var matrix : any = this.matrixFunctions.generateV1Matrix(valueArray);
+        var timestamp : string = matrix.timestamp;
 
-        // this.checkMatrix(matrix);
-        this.matrixController.cacheMatrixData(matrix)
-        this.matrixController.saveMatrixData(matrix);
-    }
+        // potentiall add error checking and notifications for state of price matrix
 
-    checkMatrix(matrix) {
-        var tester: TesterFunctions = new TesterFunctions();
-        tester.testAgainstOtherMatrix("https://ts.threebx.com/ex/rates", matrix);
+        this.matrixController.cacheMatrixData(matrix);
+        this.matrixController.saveMatrixData(valueMap, coins, timestamp);
     }
 }
 

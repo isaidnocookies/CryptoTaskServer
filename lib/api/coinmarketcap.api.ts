@@ -1,12 +1,11 @@
 import { DownloaderAPI } from "./downloader.api";
-import { ExternalConfig } from "../config/config";
 import { LoggingFunctions } from "../helpers/logging.functions";
 
 // Available Ticker Symbols
 
 class CoinMarketCapAPI extends DownloaderAPI {
     constructor() {
-        super(new ExternalConfig());
+        super();
         this.setSource(this.config.coinmarketcap.sourceName, this.config.coinmarketcap.sourceShortname);
     }
 
@@ -49,16 +48,16 @@ class CoinMarketCapAPI extends DownloaderAPI {
                 return marketValues;
             }).catch(function (error) {
                 if (error.response) {
-                    logger.log_error("CoinMarketCapAPI", "getValue", "from Response", error.response.data)
+                    logger.log_error("CoinMarketCapAPI", "getAllAssets", "from Response", error.response.data)
                 } else if (error.request) {
-                    logger.log_error("CoinMarketCapAPI", "getValue", "Failed [No Response]", error.request)
+                    logger.log_error("CoinMarketCapAPI", "getAllAssets", "Failed [No Response]", error.request)
                 } else {
-                    logger.log_error("CoinMarketCapAPI", "getValue", "Failed [Request Error]", error.message)
+                    logger.log_error("CoinMarketCapAPI", "getAllAssets", "Failed [Request Error]", error.message)
                 }
                 return [];
             });
         } catch (error) {
-            logger.log_error("CoinMarketCapAPI", "getValue", "Try Error", error.error)
+            logger.log_error("CoinMarketCapAPI", "getAllAssets", "Try Error", error.error)
             return [];
         }
     }

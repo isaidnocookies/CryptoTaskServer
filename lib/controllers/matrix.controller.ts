@@ -1,9 +1,8 @@
 import { Config } from "../config/config";
-import * as mongoose from 'mongoose';
-import { PriceMatrixSchema } from '../models/priceMatrix.model'
 
 import { TesterFunctions } from "../helpers/tester.functions";
 import { LoggingFunctions } from "../helpers/logging.functions";
+import { MatrixFunctions } from "../helpers/matrix.functions";
 
 import { MemoryController } from '../controllers/memory.controller';
 import { StorageController } from '../controllers/storage.controller';
@@ -14,6 +13,7 @@ class MatrixController {
     storageController: StorageController;
     config: Config;
     logger: LoggingFunctions;
+    matrixFunctions: MatrixFunctions;
 
     tester: TesterFunctions;
 
@@ -22,6 +22,7 @@ class MatrixController {
         this.logger = new LoggingFunctions();
         this.memoryController = new MemoryController();
         this.storageController = new StorageController();
+        this.matrixFunctions = new MatrixFunctions();
         
         this.tester = new TesterFunctions();
     }
@@ -31,36 +32,44 @@ class MatrixController {
     }
 
     getPriceMatrix() {
-        var matrix = this.memoryController.getPriceMatrix();
-        return matrix;
-    }
-
-    getMatrixData() {
         // check cache. if nothing, check db...
+        try {
+            var matrix : any = this.memoryController.getPriceMatrix();
+            if (matrix) {
+                return matrix;
+            } else {
+                var dbMatrix : any = this.getMatrixFromDB();
+                if (dbMatrix) {
+                    return dbMatrix
+                } else {
+                    throw new Error("Failed to get matrix data")
+                }
+            }
+        } catch(error) {
+            this.logger.log_fatal("MatrixController", "getPriceMatrix", "Matrix Controller failed to get price matrix!", error);
+            return {}
+        }
     }
 
-    getMatrixDataFromDB() {
+    async getMatrixFromDB() {
         // get matrix data from db
+        var data : any = await this.storageController.getMostRecentPriceData();
+        if (data.success === "false" || !data) {
+            this.logger.log_error("MatrixController", "getMatrixFromDB", "Matrix Controller failed to get price matrix from db!","");
+            return false;
+        }
+
+        var matrix: any = this.matrixFunctions.generateCompleteMatrix(data.priceData);
+        matrix.timestamp = data.timestamp;
+        return matrix;
     }
 
     getCachedPriceDataFromMemory() {
         return this.memoryController.getAllMarketValueData();
     }
 
-    async saveMatrixData(data) {
-        // save to db
-        if (this.config.saveMatrixToDatabase) {
-            var PriceMatrixObject: any = mongoose.model('PriceMatrixObject', PriceMatrixSchema);
-
-            try {
-                const priceMatrix = new PriceMatrixObject({ priceMatrix: JSON.stringify(data), version: this.config.version, timestamp: data.timestamp });
-                return priceMatrix.save().then(() => {
-                    this.logger.log_debug("MatrixService", "saveMatrix", "Matrix saved to DB", "");
-                })
-            } catch (error) {
-                this.logger.log_error("MatrixService", "saveMatrix", "Failed to save to matrix to DB", "");
-            }
-        }
+    saveMatrixData(data, coins, timestamp) {
+        this.storageController.saveMatrixData(data, coins, timestamp);
     }
 
     cacheMatrixData(data) {
