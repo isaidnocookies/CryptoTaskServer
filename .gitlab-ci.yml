@@ -1,0 +1,34 @@
+# image: docker:latest
+image: ubuntu
+
+services:
+- docker:dind
+
+stages:
+  - registry
+
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver
+  TS_SEMANTIC_VERSION: $TS_VERSION
+  DEV: dev
+  PURPLE: purple
+  RED: red
+  PROD: live
+
+# 
+# CI/CD for Releasing PURPLE
+# 
+purple_add_to_registry:
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  stage: registry
+  only:
+    - release/purple
+  environment:
+    name: purple
+  script:
+   # - docker pull $CONTAINER_IMAGE/$PURPLE:latest || true
+    - docker build $CONTAINER_IMAGE/$PURPLE:latest --tag $CONTAINER_IMAGE/$PURPLE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE/$PURPLE:latest -f purple.dockerfile .
+    - docker push $CONTAINER_IMAGE/$PURPLE:$TS_SEMANTIC_VERSION
+    - docker push $CONTAINER_IMAGE/$PURPLE:latest
