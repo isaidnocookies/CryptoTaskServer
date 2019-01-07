@@ -26,11 +26,6 @@ class MemoryController {
             this.redisClient = redis.createClient(this.config.redis.production.port, this.config.redis.production.url);
         }
 
-        // this.redisClient.on('connect', function() {
-        //     //var logger : any = new LoggingFunctions();
-        //     //logger.log_debug("MemoryController", "configureRedisClient", "Client Connected!", "")
-        // });
-
         this.redisClient.on('error', function (err) {
             var logger: any = new LoggingFunctions();
             logger.log_error("MemoryController", "configureRedisClient", "Client failed somehow!", err)
