@@ -14,7 +14,7 @@ variables:
 # 
 # CI/CD for Release
 # 
-purple_add_to_registry:
+add_to_registry:
   image: docker:latest
   before_script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
@@ -23,6 +23,6 @@ purple_add_to_registry:
     - release
   script:
    # - docker pull $CONTAINER_IMAGE/$PURPLE:latest || true
-    - docker build $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
+    - docker build --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
     - docker push $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION
     - docker push $CONTAINER_IMAGE:latest
