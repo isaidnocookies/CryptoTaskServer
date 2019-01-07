@@ -22,7 +22,6 @@ add_to_registry:
   only:
     - release
   script:
-   # - docker pull $CONTAINER_IMAGE/$PURPLE:latest || true
     - docker build --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
     - docker push $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION
     - docker push $CONTAINER_IMAGE:latest
