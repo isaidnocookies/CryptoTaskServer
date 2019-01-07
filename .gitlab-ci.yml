@@ -10,13 +10,9 @@ stages:
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver
   TS_SEMANTIC_VERSION: $TS_VERSION
-  DEV: dev
-  PURPLE: purple
-  RED: red
-  PROD: live
 
 # 
-# CI/CD for Releasing PURPLE
+# CI/CD for Release
 # 
 purple_add_to_registry:
   image: docker:latest
@@ -24,11 +20,9 @@ purple_add_to_registry:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   stage: registry
   only:
-    - release/purple
-  environment:
-    name: purple
+    - release
   script:
    # - docker pull $CONTAINER_IMAGE/$PURPLE:latest || true
-    - docker build $CONTAINER_IMAGE/$PURPLE:latest --tag $CONTAINER_IMAGE/$PURPLE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE/$PURPLE:latest -f purple.dockerfile .
-    - docker push $CONTAINER_IMAGE/$PURPLE:$TS_SEMANTIC_VERSION
-    - docker push $CONTAINER_IMAGE/$PURPLE:latest
+    - docker build $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
+    - docker push $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION
+    - docker push $CONTAINER_IMAGE:latest
