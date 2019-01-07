@@ -8,7 +8,7 @@ stages:
   - registry
 
 variables:
-  CONTAINER_IMAGE: registry.gitlab.com/threebx/threebxmarketplace/node-task-server
+  CONTAINER_IMAGE: registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver
   TS_SEMANTIC_VERSION: $TS_VERSION
 
 # 
