@@ -34,6 +34,7 @@ export class SlackNotificationAPI {
 
         var icon = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/154/warning-sign_26a0.png";
         var color = "#ffa149";
+        var env = this.config.environment;
 
         await axios.post(webhook, {
             attachments: [
@@ -41,7 +42,7 @@ export class SlackNotificationAPI {
                     "mrkdwn": true,
                     "fallback": message,
                     "color": color,
-                    "title": "TaskServer - Error",
+                    "title": "TaskServer - Error - " + env,
                     "text": message,
                     "thumb_url": icon
                 }

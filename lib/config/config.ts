@@ -56,7 +56,7 @@ class Config {
 
     db: any = {
         production: {
-            url: ""
+            url: "mongodb://ts.threebx.com/TaskServer"
         },
         test: {
             url: "mongodb://localhost/TaskServer"
@@ -65,11 +65,12 @@ class Config {
 
     redis: any = {
         production: {
-            url: "",
-            port: ""
+            url: "ts.threebx.com",
+            port: "6379"
         },
         local: {
-            url: "127.0.0.1",
+            //url: "127.0.0.1",
+            url: "host.docker.internal",
             port: "6379"
         },
         keys : {

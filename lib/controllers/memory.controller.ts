@@ -21,7 +21,7 @@ class MemoryController {
         // add authentication _ TODO
         if (this.config.localEnvironment) {
             // Use default connection information for local redis server/db
-            this.redisClient = redis.createClient();
+            this.redisClient = redis.createClient(this.config.redis.local.port, this.config.redis.local.url);
         } else {
             this.redisClient = redis.createClient(this.config.redis.production.port, this.config.redis.production.url);
         }
