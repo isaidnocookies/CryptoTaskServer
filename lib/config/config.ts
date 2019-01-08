@@ -5,7 +5,7 @@ class Config {
     version: string = "0.0.1"
     environment: string;
     localEnvironment: boolean = true;
-    port: number = 3333;
+    port: number = 443;
     debug: boolean = true;
     saveMatrixToDatabase: boolean = true;
 
@@ -24,18 +24,21 @@ class Config {
             this.localEnvironment = true;
             this.environment = "Local/Dev";
             this.slackWebhook = this._slackWebhooks.dev_taskserver;
+            this.port = 80;
 
         } else if (process.env.ENVIRONMENT === "PURPLE") {
 
             this.localEnvironment = false;
             this.environment = "Purple";
             this.slackWebhook = this._slackWebhooks.dev_taskserver;
+            this.port = 443;
 
         } else if (process.env.ENVIRONMENT === "RED") {
 
             this.localEnvironment = false;
             this.environment = "Red";
             this.slackWebhook = this._slackWebhooks.dev_taskserver;
+            this.port = 443;
 
         } else if (process.env.ENVIRONMENT === "PROD") {
 
@@ -43,6 +46,7 @@ class Config {
             this.debug = false;
             this.environment = "Production";
             this.slackWebhook = this._slackWebhooks.prod_taskserver;
+            this.port = 443;
         }
     }
 
