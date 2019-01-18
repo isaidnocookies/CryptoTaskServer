@@ -20,7 +20,8 @@ export class ExternalConfig
         ZEC: "ZEC",
         ZEN: "ZEN",
         ZRX: "ZRX",
-        WAVES: "WAVES"
+        WAVES: "WAVES",
+        MOBI: "MOBI"
     };
 
     currencies : any = {
@@ -74,7 +75,8 @@ export class ExternalConfig
             this.assets.RMT,
             this.assets.TKS,
             this.assets.WAVES,
-            this.assets.ZEN
+            this.assets.ZEN,
+            this.assets.MOBI
         ],
         supportedCurrencies: [
             this.currencies.USD,
@@ -87,7 +89,8 @@ export class ExternalConfig
             SHEL: "shelterdao",
             ZEN: "zencash",
             WAVES: "waves",
-            TKS: "tokes"
+            TKS: "tokes",
+            MOBI: "mobius"
         },
         milliDelayPerRequest: 250
     };
