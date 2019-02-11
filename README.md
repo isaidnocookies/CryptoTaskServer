@@ -21,13 +21,80 @@ Currently, tests are used manually by importing and integrating the testing func
 
 TBD
 
+## Running the Task Server Locally
+
+You will need MongoDB and Redis running locally.
+
+MongoDB can be installed via Brew. Create its database directory and make it accessible.
+
+```
+brew install mongodb
+mkdir -p /data/db
+sudo chown -R `id -un` /data/db
+```
+
+You should now be able to launch your MongoDB locally by runinng
+
+```
+mongod
+```
+
+
+To install redis locally run the following:
+
+```
+wget http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+make
+sudo make install
+```
+
+Then naviage to redis-stable/src and run
+
+```
+redis-server
+```
+
+Your redis server should now be running.
+
+You can now launch your task server locally by running the following in your task server directory.
+
+```
+npm run dev
+```
+
+
+
+## Troubleshooting
+
+If the process fails to spawn, make sure that these dependencies are installed:
+
+```
+npm install ts-node
+npm install tsc
+npm install typescript
+```
+
+If your MongoDB instance fails to launch, your permissions for its data folder may be insufficient. You can also just run mongod as sudo.
+
+```
+sudo chown -R `id -un` /data/db
+```
+or
+```
+sudo mongod
+```
+
 ## Built With
 
 * Typescript
 * NodeJS
 * MongoDB
 * Express
+* Redis
 
 ## Authors
 
 * **Christopher Forte** - *Initial work*
+* **Scott Oberman** - *More work and documentation*
