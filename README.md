@@ -58,6 +58,16 @@ redis-server
 
 Your redis server should now be running.
 
+You will need to change the redis url in the task server to local instead of docker (unless you are using docker)
+
+```
+local: {
+    url: "127.0.0.1",
+    //url: "host.docker.internal",
+    port: "6379"
+},
+```
+
 You can now launch your task server locally by running the following in your task server directory.
 
 ```
