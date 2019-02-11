@@ -82,7 +82,6 @@ If the process fails to spawn, make sure that these dependencies are installed:
 
 ```
 npm install ts-node
-npm install tsc
 npm install typescript
 ```
 
