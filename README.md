@@ -19,7 +19,15 @@ Currently, tests are used manually by importing and integrating the testing func
 
 ## Deployment
 
-TBD
+Update your environmental variables under Gitlab Settings -> CI / CD (ie increment the version).
+Create a new tag for the version created for the new version of the Task Server.
+
+SSH into the environment you wish to deploy to and alter the following command to fit your region, etc.
+
+```
+docker run --name task_server_VERSION_NUMBER_HERE --restart=always --network="host" -td --init --hostname=“ENVIRONMENT-ts.threebx.com" -e AWS_DEFAULT_REGION="us-west-2b” registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver:latest
+```
+
 
 ## Running the Task Server Locally
 
