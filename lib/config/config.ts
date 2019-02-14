@@ -60,7 +60,9 @@ class Config {
 
     db: any = {
         production: {
-            url: "mongodb://ts.threebx.com/TaskServer"
+            url: "mongodb://localhost/TaskServer"
+            //url: "mongodb://ts.threebx.com/TaskServer" // Since this AWS instance is being removed,
+                                                         // using local mongo is probably better.
         },
         test: {
             url: "mongodb://localhost/TaskServer"
@@ -69,12 +71,14 @@ class Config {
 
     redis: any = {
         production: {
-            url: "ts.threebx.com",
+            url: "127.0.0.1",
+            //url: "ts.threebx.com", // Since this AWS instance is being removed,
+                                     // using local redist is probably better.
             port: "6379"
         },
         local: {
-            //url: "127.0.0.1",
-            url: "host.docker.internal",
+            url: "127.0.0.1",
+            //url: "host.docker.internal", // Use this when testing in a docker container
             port: "6379"
         },
         keys : {
