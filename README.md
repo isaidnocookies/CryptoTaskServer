@@ -27,7 +27,7 @@ SSH into the environment you wish to deploy to and alter the following command t
 ```
 docker run --name task_server_VERSION_NUMBER_HERE --restart=always --network="host" -td --init --hostname=“ENVIRONMENT-ts.threebx.com" -e AWS_DEFAULT_REGION="us-west-2b” registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver:latest
 ```
-
+The Mongo and Redist databases are not in the docker container; they are on the host. Thus, Mongo and Redis should not need to be installed in the docker container.
 
 ## Running the Task Server Locally
 
