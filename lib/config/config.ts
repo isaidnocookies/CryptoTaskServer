@@ -24,7 +24,7 @@ class Config {
             this.localEnvironment = true;
             this.environment = "Local/Dev";
             this.slackWebhook = this._slackWebhooks.dev_taskserver;
-            this.port = 80;
+            this.port = 443;
 
         } else if (process.env.ENVIRONMENT === "PURPLE") {
 
