@@ -36,7 +36,7 @@ add_to_registry:
     # - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD registry.gitlab.com
   stage: registry
   only:
-    - release/red
+    - red
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker build --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
