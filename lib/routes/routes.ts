@@ -6,7 +6,7 @@ export class Routes {
 
     public routes (app) : void {
         app.route('/').get((req: Request, res: Response) => {
-            res.status(200).send({message: "Buzz buzz!"})
+            res.status(200).send({message: "Buzz buzz!111"})
         });
 
         app.post('/', (req: Request, res: Response) => {
