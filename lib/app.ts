@@ -82,9 +82,16 @@ class App {
     private listen(): void {
         var port : number = this.configuration.port;
         var logger: LoggingFunctions = new LoggingFunctions();
-        this.server.listen(port, function () {
-            logger.log_debug("App", "listen", "Https app listening in prod environment", `HTTPS server running at ${port}`)
-        });
+        
+        if (this.configuration.localEnvironment) {
+            this.app.listen(port, function () {
+                logger.log_debug("App", "listen", "Http app listening in local environment", `HTTP server running at ${port}`)
+            });
+        } else {
+            this.server.listen(port, function () {
+                logger.log_debug("App", "listen", "Https app listening in prod environment", `HTTPS server running at ${port}`)
+            });
+        }
     }
 }
 
