@@ -11,6 +11,11 @@
   },
   "keywords": [],
   "author": "Christopher Forte",
+  "contributors": [
+    {
+      "name": "Scott Oberman"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "@isaidnocookies/stringmath": "^1.2.3",
