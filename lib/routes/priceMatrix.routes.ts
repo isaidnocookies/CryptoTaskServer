@@ -27,7 +27,7 @@ export class PriceMatrixRoutes {
 
         app.get('/testMatrix', (req: Request, res: Response) => {
             this.matrixController.getPriceMatrix().then(async (matrix) => {
-                var testResult : any = await this.matrixController.testAgainstExistingMatrix("https://ts.threebx.com/ex/rates", matrix);
+                var testResult : any = await this.matrixController.testAgainstExistingMatrix("https://purple-ts.threebx.com/ex/rates", matrix);
                 res.status(200).send({result: testResult});
             })
         });

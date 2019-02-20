@@ -25,7 +25,13 @@ Create a new tag for the version created for the new version of the Task Server.
 SSH into the environment you wish to deploy to and alter the following command to fit your region, etc.
 
 ```
-docker run --name task_server_VERSION_NUMBER_HERE --restart=always --network="host" -td --init --hostname=“ENVIRONMENT-ts.threebx.com" -e AWS_DEFAULT_REGION="us-west-2b” registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver:latest
+docker run --name task_server_VERSION_NUMBER_HERE --restart=always --network="host" -td --init --hostname=“YOUR_ENVIRONMENT-ts.threebx.com" -e "ENVIRONMENT=YOUR_ENVIRONMENT" -e "AWS_DEFAULT_REGION=us-west-2b" registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver:latest
+```
+
+An example when deploying to red:
+
+```
+docker run --name task_server_0.0.2 --restart=always --network="host" -td --init --hostname="red1-ts.threebx.com" -e "ENVIRONMENT=RED" -e "AWS_DEFAULT_REGION=us-west-2b" registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver/red:latest
 ```
 The Mongo and Redist databases are not in the docker container; they are on the host. Thus, Mongo and Redis should not need to be installed in the docker container.
 

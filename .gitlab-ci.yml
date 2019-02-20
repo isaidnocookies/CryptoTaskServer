@@ -10,6 +10,7 @@ stages:
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/threebx/threebxmarketplace/nodetaskserver
   TS_SEMANTIC_VERSION: $TS_VERSION
+  RED: red
 
 # 
 # CI/CD for Release
@@ -26,3 +27,17 @@ add_to_registry:
     - docker build --tag $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE:latest .
     - docker push $CONTAINER_IMAGE:$TS_SEMANTIC_VERSION
     - docker push $CONTAINER_IMAGE:latest
+
+# 
+# CI/CD for Red
+# 
+add_to_registry:
+  image: docker:latest
+  stage: registry
+  only:
+    - red
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build --tag $CONTAINER_IMAGE/$RED:$TS_SEMANTIC_VERSION --tag $CONTAINER_IMAGE/$RED:latest .
+    - docker push $CONTAINER_IMAGE/$RED:$TS_SEMANTIC_VERSION
+    - docker push $CONTAINER_IMAGE/$RED:latest
