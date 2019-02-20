@@ -73,7 +73,7 @@ class Config {
         production: {
             url: "127.0.0.1",
             //url: "ts.threebx.com", // Since this AWS instance is being removed,
-                                     // using local redist is probably better.
+                                     // using local redis is probably better.
             port: "6379"
         },
         local: {

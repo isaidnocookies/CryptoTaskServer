@@ -82,7 +82,6 @@ class App {
     private listen(): void {
         var port : number = this.configuration.port;
         var logger: LoggingFunctions = new LoggingFunctions();
-        
         if (this.configuration.localEnvironment) {
             this.app.listen(port, function () {
                 logger.log_debug("App", "listen", "Http app listening in local environment", `HTTP server running at ${port}`)
